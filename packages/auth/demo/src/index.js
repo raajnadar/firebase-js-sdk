@@ -72,7 +72,9 @@ import {
   getRedirectResult,
   browserPopupRedirectResolver,
   connectAuthEmulator,
-  initializeRecaptchaConfig
+  initializeRecaptchaConfig,
+  signInWithPasskey,
+  linkWithPasskey
 } from '@firebase/auth';
 
 import { config } from './config';
@@ -491,6 +493,72 @@ function onSetTenantID(_event) {
 
 function onInitializeRecaptchaConfig() {
   initializeRecaptchaConfig(auth);
+}
+
+function onSignInWithPasskey() {
+  const passkeyDisplayName = $('#passkey-display-name').val();
+  console.log(passkeyDisplayName);
+
+  signInWithPasskey(auth, passkeyDisplayName).then(onAuthSuccess, onAuthError);
+
+  // const publicKey = {
+  //   // Define the parameters for the public key credential
+  //   challenge: Uint8Array.from('random_challenge_here'),
+  //   rp: { name: 'Example Corp' },
+  //   user: { id: Uint8Array.from('random_user_id_here'), name: 'exampleuser2' },
+  //   pubKeyCredParams: [{ type: 'public-key', alg: -7 }]
+  // };
+
+  // console.log(publicKey);
+
+  // // Send the public key credential request to the user's device
+  // navigator.credentials
+  //   .get({ publicKey })
+  //   .then(credential => {
+  //     // Retrieve the passkey from the credential response
+  //     const passkey = credential.response.clientDataJSON;
+
+  //     // Send the passkey to the server for verification
+  //     fetch('/verify-passkey', {
+  //       method: 'POST',
+  //       body: passkey
+  //     })
+  //       .then(response => {
+  //         // Handle the server response
+  //         console.log('!!!!!' + response);
+  //       })
+  //       .catch(error => {
+  //         // Handle the fetch error
+  //         console.log('!!!!! Handle the fetch error' + error);
+  //       });
+  //   })
+  //   .catch(error => {
+  //     // Handle the navigator.credentials.get() error
+  //     console.log('!!!!! Handle the navigator.credentials.get() error' + error);
+  //   });
+}
+
+function onLinkWithPasskey() {
+  linkWithPasskey(activeUser()).then(onAuthUserCredentialSuccess, onAuthError);
+}
+
+async function onClearAllPasskeys() {
+  try {
+    const credentialsContainer = navigator.credentials;
+    const encoder = new TextEncoder();
+    const publicKeyCred = await credentialsContainer.get({
+      publicKey: {
+        challenge: encoder.encode('fake-challenge'),
+        rpId: 'localhost'
+      }
+    });
+    console.log('Before delete');
+    console.log(publicKeyCred);
+    await credentialsContainer.preventSilentAccess();
+    await credentialsContainer.delete(publicKeyCred);
+  } catch (error) {
+    console.error('Failed to clear public keys:', error);
+  }
 }
 
 /**
@@ -2033,6 +2101,8 @@ function initApp() {
   $('#sign-in-anonymously').click(onSignInAnonymously);
   $('.set-tenant-id').click(onSetTenantID);
   $('#initialize-recaptcha-config').click(onInitializeRecaptchaConfig);
+  $('#sign-in-with-passkey').click(onSignInWithPasskey);
+  $('#clear-all-passkeys').click(onClearAllPasskeys);
   $('#sign-in-with-generic-idp-credential').click(
     onSignInWithGenericIdPCredential
   );
@@ -2067,6 +2137,7 @@ function initApp() {
   $('#confirm-password-reset').click(onConfirmPasswordReset);
 
   $('#get-provider-data').click(onGetProviderData);
+  $('#link-with-passkey').click(onLinkWithPasskey);
   $('#link-with-email-and-password').click(onLinkWithEmailAndPassword);
   $('#link-with-generic-idp-credential').click(onLinkWithGenericIdPCredential);
   $('#unlink-provider').click(onUnlinkProvider);

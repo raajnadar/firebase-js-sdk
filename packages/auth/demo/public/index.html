@@ -247,6 +247,21 @@
                 Initialize reCAPTCHA Config
               </button>
 
+              <!-- Passkeys -->
+              <div class="group">Passkeys</div>
+              <form class="form form-bordered no-submit">
+                <input type="text" name="passkey-display-name" id="passkey-display-name"
+                       class="form-control" placeholder="Display Name" />
+                <button class="btn btn-block btn-primary"
+                      id="sign-in-with-passkey">
+                Sign in with Passkey
+                </button>
+                <button class="btn btn-block btn-primary"
+                      id="clear-all-passkeys">
+                Clear All Passkeys
+                </button>
+              </form>
+
               <!-- Sign up -->
               <div class="group">Sign Up</div>
               <form class="form form-bordered no-submit">
@@ -425,6 +440,10 @@
               <div class="group">Linking/Unlinking</div>
               <button class="btn btn-block btn-default" id="get-provider-data">
                 Get Providers Data
+              </button>
+              <button class="btn btn-block btn-primary"
+                        id="link-with-passkey">
+                  Link with Passkey
               </button>
               <form class="form form-bordered no-submit">
                 <input type="email" name="email" id="link-email"

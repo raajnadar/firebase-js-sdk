@@ -443,6 +443,9 @@ export function isSignInWithEmailLink(auth: Auth, emailLink: string): boolean;
 export function linkWithCredential(user: User, credential: AuthCredential): Promise<UserCredential>;
 
 // @public
+export function linkWithPasskey(user: User): Promise<UserCredential>;
+
+// @public
 export function linkWithPhoneNumber(user: User, phoneNumber: string, appVerifier: ApplicationVerifier): Promise<ConfirmationResult>;
 
 // @public
@@ -744,6 +747,9 @@ export function signInWithEmailAndPassword(auth: Auth, email: string, password: 
 
 // @public
 export function signInWithEmailLink(auth: Auth, email: string, emailLink?: string): Promise<UserCredential>;
+
+// @public (undocumented)
+export function signInWithPasskey(auth: Auth): Promise<UserCredential>;
 
 // @public
 export function signInWithPhoneNumber(auth: Auth, phoneNumber: string, appVerifier: ApplicationVerifier): Promise<ConfirmationResult>;

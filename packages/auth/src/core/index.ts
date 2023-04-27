@@ -258,6 +258,7 @@ export {
   sendEmailVerification,
   verifyBeforeUpdateEmail
 } from './strategies/email';
+export { signInWithPasskey, linkWithPasskey } from './strategies/passkey';
 
 // core
 export { ActionCodeURL, parseActionCodeURL } from './action_code_url';

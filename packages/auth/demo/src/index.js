@@ -496,10 +496,10 @@ function onInitializeRecaptchaConfig() {
 }
 
 function onSignInWithPasskey() {
-  const passkeyDisplayName = $('#passkey-display-name').val();
-  console.log(passkeyDisplayName);
+  const passkeyUsername = $('#passkey-username').val();
+  console.log(passkeyUsername);
 
-  signInWithPasskey(auth, passkeyDisplayName).then(onAuthSuccess, onAuthError);
+  signInWithPasskey(auth, passkeyUsername).then(onAuthSuccess, onAuthError);
 }
 
 function onLinkWithPasskey() {

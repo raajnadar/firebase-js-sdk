@@ -41,29 +41,8 @@ export class PasskeyAuthProvider implements AuthProvider {
     const publicKey = {
       challenge: options.challenge,
       rpId: options.rpId,
-      userVerification: options.userVerification
-      //   rp: {
-      //     // name: 'Example Inc.',
-      //     id: rpId
-      //   },
-      //   user: {
-      //     id: new Uint8Array(16),
-      //     name: 'john.doe@example.com',
-      //     displayName: 'John Doe'
-      //   }
-      //   pubKeyCredParams: [
-      //     {
-      //       type: 'public-key',
-      //       alg: -7 // "ES256" IANA COSE Algorithms registry value
-      //     }
-      //   ],
-      //   authenticatorSelection: {
-      //     authenticatorAttachment: 'platform',
-      //     requireResidentKey: false
-      //   },
-      //   timeout: 60000,
-      //   attestation: 'direct',
-      //   extensions: {}
+      userVerification: options.userVerification,
+      mediation: "conditional",
     };
 
     // call navigator.credentials.get() with the publicKey options

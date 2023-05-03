@@ -55,57 +55,61 @@ export async function signInWithPasskey(auth: Auth): Promise<UserCredential> {
     credentialRequestOptions: {
       challenge: encoder.encode('fake-challenge').buffer,
       rpId: 'localhost',
-      userVerification: 'required'
+      userVerification: 'required',
+      allowCredentials: [
+        {
+          publicKey: {
+            name: 'johndoe@example.com'
+          }
+        }
+      ]
     }
   };
-
+;
   // Get crendentials
   await PasskeyAuthProvider.getCredential(
     startSignInResponse.credentialRequestOptions
   )
     .then(async cred => {
-      if (false) {
-        // Sign in an existing user
-        console.log('getCredential then');
-        console.log(cred);
-        // Finish Passkey Sign in
-        const finalizeSignInRequest = {
-          sessionId: encoder.encode('fake-session-id'),
-          authenticatorAuthenticationResponse: {
-            credentialId: encoder.encode(cred?.id),
-            authenticatorAssertionResponse: cred?.response,
-            credentialType: cred?.type
-          }
-        };
-        // const finalizeSignInResponse = await finalizePasskeySignin(authInternal, finalizeSignInRequest);
-        const finalizeSignInResponse = {
-          localId: 'fake-local-id',
-          idToken: 'fake-id-token',
-          refreshToken: 'fake-refresh-token'
-        };
-        const operationType = OperationType.SIGN_IN;
-        const userCredential = await UserCredentialImpl._fromIdTokenResponse(
-          authInternal,
-          operationType,
-          finalizeSignInResponse
-        );
-        await auth.updateCurrentUser(userCredential.user);
-        return userCredential;
-      } else {
-        // Sign up a new user
-        signInAnonymously(authInternal)
-          .then(async userCredential => {
-            await auth.updateCurrentUser(userCredential.user);
-            await linkWithPasskey(auth.currentUser!);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      }
+      // Sign in an existing user
+      console.log('getCredential then');
+      console.log(cred);
+      // Finish Passkey Sign in
+      const finalizeSignInRequest = {
+        sessionId: encoder.encode('fake-session-id'),
+        authenticatorAuthenticationResponse: {
+          credentialId: encoder.encode(cred?.id),
+          authenticatorAssertionResponse: cred?.response,
+          credentialType: cred?.type
+        }
+      };
+      // const finalizeSignInResponse = await finalizePasskeySignin(authInternal, finalizeSignInRequest);
+      const finalizeSignInResponse = {
+        localId: 'fake-local-id',
+        idToken: 'fake-id-token',
+        refreshToken: 'fake-refresh-token'
+      };
+      const operationType = OperationType.SIGN_IN;
+      const userCredential = await UserCredentialImpl._fromIdTokenResponse(
+        authInternal,
+        operationType,
+        finalizeSignInResponse
+      );
+      await auth.updateCurrentUser(userCredential.user);
+      return userCredential;
     })
     .catch(err => {
       console.log('getCredential catch');
       console.log(err);
+      // Sign up a new user
+      signInAnonymously(authInternal)
+        .then(async userCredential => {
+          await auth.updateCurrentUser(userCredential.user);
+          await linkWithPasskey(auth.currentUser!);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     });
 
   return Promise.reject(new Error('signInWithPasskey Not implemented'));
@@ -133,12 +137,12 @@ export async function linkWithPasskey(user: User): Promise<UserCredential> {
     credentialCreationOptions: {
       rp: {
         id: 'localhost',
-        name: 'localhost'
+        name: 'localhost' // To be set
       },
       user: {
         id: encoder.encode('fake-user-id'),
-        name: 'fake-user-name',
-        displayName: 'fake-display-name'
+        name: user.email ? user.email! : 'fake-user-name', // To be set
+        displayName: user.displayName ? user.displayName! : 'fake-display-name' // To be set
       },
       challenge: encoder.encode('fake-challenge').buffer,
       pubKeyCredParams: [

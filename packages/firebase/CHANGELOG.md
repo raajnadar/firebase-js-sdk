@@ -1,5 +1,19 @@
 # firebase
 
+## 9.22.2
+
+### Patch Changes
+
+- [`4a86f4eb0`](https://github.com/firebase/firebase-js-sdk/commit/4a86f4eb0c606443ac01d99a9169e4074d5d21dc) [#7294](https://github.com/firebase/firebase-js-sdk/pull/7294) (fixes [#7279](https://github.com/firebase/firebase-js-sdk/issues/7279)) - Fixed the types path for `compat/app`.
+
+- Updated dependencies [[`6bc38c32b`](https://github.com/firebase/firebase-js-sdk/commit/6bc38c32be6b8bcc1fbd7201889c6ab92e4ed6c1)]:
+  - @firebase/app@0.9.12
+  - @firebase/auth@0.23.3
+  - @firebase/firestore@3.12.2
+  - @firebase/app-compat@0.2.12
+  - @firebase/auth-compat@0.4.3
+  - @firebase/firestore-compat@0.3.11
+
 ## 9.22.1
 
 ### Patch Changes
